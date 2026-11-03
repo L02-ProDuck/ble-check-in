@@ -104,5 +104,92 @@ export class SessionsService {
       where: { id },
     });
   }
-}
 
+  async seedDemo() {
+    const now = new Date();
+    const startTimeSession1 = new Date(now.getTime() - 30 * 60 * 1000); // 30 phút trước
+    const endTimeSession1 = new Date(now.getTime() + 4 * 60 * 60 * 1000); // Còn 4 tiếng nữa
+
+    const session1 = await this.prisma.clubSession.create({
+      data: {
+        title: 'Sinh hoạt CLB IT - Lập trình Mobile & BLE Proximity',
+        clubCode: 'CLUB_IT_DUT',
+        description: 'Phiên điểm danh đầu giờ tại phòng Lab F204 bằng thiết bị phát BLE Beacon.',
+        startTime: startTimeSession1,
+        endTime: endTimeSession1,
+        status: 'ACTIVE',
+        beaconUuid: 'FDA50693-A4E2-4FB1-AFCF-C6EB07647825',
+        major: 100,
+        minor: 1,
+        minRssiThreshold: -80,
+        secretToken: 'SEC-8899',
+      },
+    });
+
+    const pastStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const pastEnd = new Date(pastStart.getTime() + 2 * 60 * 60 * 1000);
+
+    const session2 = await this.prisma.clubSession.create({
+      data: {
+        title: 'Workshop Giới thiệu Công nghệ IoT & BLE',
+        clubCode: 'CLUB_IT_DUT',
+        description: 'Buổi training kỹ thuật cho thành viên mới khóa 2026.',
+        startTime: pastStart,
+        endTime: pastEnd,
+        status: 'CLOSED',
+        beaconUuid: 'FDA50693-A4E2-4FB1-AFCF-C6EB07647825',
+        major: 100,
+        minor: 2,
+        minRssiThreshold: -80,
+      },
+    });
+
+    await this.prisma.checkInRecord.createMany({
+      data: [
+        {
+          sessionId: session1.id,
+          studentId: '21120001',
+          studentName: 'Nguyễn Văn An',
+          deviceId: 'iPhone 15 Pro (iOS 18)',
+          scannedRssi: -62,
+          distanceEstimated: 1.41,
+          status: 'SUCCESS',
+          note: 'Điểm danh BLE hợp lệ (khoảng cách ~1.41m)',
+          checkInTime: new Date(startTimeSession1.getTime() + 5 * 60 * 1000),
+        },
+        {
+          sessionId: session1.id,
+          studentId: '21120002',
+          studentName: 'Trần Thị Bình',
+          deviceId: 'Samsung Galaxy S24 (Android 14)',
+          scannedRssi: -71,
+          distanceEstimated: 2.82,
+          status: 'SUCCESS',
+          note: 'Điểm danh BLE hợp lệ (khoảng cách ~2.82m)',
+          checkInTime: new Date(startTimeSession1.getTime() + 10 * 60 * 1000),
+        },
+        {
+          sessionId: session1.id,
+          studentId: '21120003',
+          studentName: 'Lê Hoàng Cường',
+          deviceId: 'Xiaomi 13T (HyperOS)',
+          scannedRssi: -68,
+          distanceEstimated: 2.24,
+          status: 'SUCCESS',
+          note: 'Điểm danh BLE hợp lệ (khoảng cách ~2.24m)',
+          checkInTime: new Date(startTimeSession1.getTime() + 12 * 60 * 1000),
+        },
+      ],
+    });
+
+    return {
+      message: 'Nạp dữ liệu demo thành công cho giáo viên kiểm thử!',
+      activeSessionId: session1.id,
+      sampleBeaconUuid: session1.beaconUuid,
+      sampleMajor: session1.major,
+      sampleMinor: session1.minor,
+      secretToken: session1.secretToken,
+      note: 'Bạn có thể dùng ID phiên này để test API điểm danh POST /api/v1/check-in ngay lập tức!',
+    };
+  }
+}

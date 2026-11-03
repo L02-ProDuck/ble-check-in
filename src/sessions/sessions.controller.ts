@@ -36,6 +36,17 @@ export class SessionsController {
     return this.sessionsService.create(dto);
   }
 
+  @Post('seed-demo')
+  @ApiOperation({
+    summary: '🎯 Nạp dữ liệu mẫu nhanh (Dành cho Giáo viên & Người chấm test nhanh)',
+    description:
+      'Chỉ cần bấm Execute, hệ thống sẽ tự động tạo sẵn 2 phiên điểm danh CLB (kèm phiên ACTIVE đang mở) và danh sách điểm danh sinh viên mẫu.',
+  })
+  @ApiResponse({ status: 201, description: 'Đã nạp dữ liệu demo thành công.' })
+  seedDemo() {
+    return this.sessionsService.seedDemo();
+  }
+
   @Get()
   @ApiOperation({
     summary: 'Lấy danh sách tất cả các phiên điểm danh',
@@ -94,4 +105,3 @@ export class SessionsController {
     return this.sessionsService.remove(id);
   }
 }
-

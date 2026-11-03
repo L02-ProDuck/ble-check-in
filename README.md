@@ -14,7 +14,7 @@
 3. [Chi tiết 2 Bộ API Collections](#3-chi-tiết-2-bộ-api-collections)
 4. [Hướng dẫn Cấu hình Neon PostgreSQL](#4-hướng-dẫn-cấu-hình-neon-postgresql)
 5. [Hướng dẫn Deploy lên Render](#5-hướng-dẫn-deploy-lên-render)
-6. [Chạy Local Development](#6-chạy-local-development)
+6. [Chạy Local Development & Seed Dữ liệu](#6-chạy-local-development--seed-dữ-liệu)
 7. [Nộp bài & Kiểm thử Swagger](#7-nộp-bài--kiểm-thử-swagger)
 
 ---
@@ -48,6 +48,7 @@ Hệ thống cung cấp giải pháp điểm danh sinh viên/thành viên CLB kh
 | Phương thức | Endpoint | Mô tả |
 | :--- | :--- | :--- |
 | **POST** | `/api/v1/sessions` | Tạo phiên điểm danh mới (cài đặt UUID, Major, Minor, RSSI threshold, thời gian) |
+| **POST** | `/api/v1/sessions/seed-demo` | 🎯 **Nạp dữ liệu mẫu nhanh**: Tạo sẵn 2 phiên họp (kèm phiên ACTIVE) và 3 sinh viên điểm danh mẫu để test ngay trên Swagger |
 | **GET** | `/api/v1/sessions` | Lấy danh sách tất cả các phiên điểm danh (hỗ trợ lọc theo `clubCode`, `status`) |
 | **GET** | `/api/v1/sessions/:id` | Xem chi tiết thông số cấu hình BLE của một phiên cụ thể |
 | **PATCH** | `/api/v1/sessions/:id/status` | Đóng hoặc mở lại phiên điểm danh (`ACTIVE`, `CLOSED`, `CANCELLED`) |
@@ -83,23 +84,23 @@ Hệ thống cung cấp giải pháp điểm danh sinh viên/thành viên CLB kh
 1. Đẩy code lên GitHub repository:
    ```bash
    git add .
-   git commit -m "feat: complete BLE proximity check-in API with 2 collections"
+   git commit -m "fix(deploy): fix nest cli on render and add seed demo data"
    git push origin main
    ```
 2. Đăng nhập vào [Render Dashboard](https://dashboard.render.com).
 3. Nhấp chọn **New +** $\rightarrow$ **Web Service**.
-4. Kết nối với GitHub repository `ble-check-in`.
+4. Kết nối với GitHub repository `L02-ProDuck/ble-check-in`.
 5. Điền các thông số:
    - **Name:** `ble-check-in-api`
    - **Region:** `Singapore` (hoặc cùng region với Neon)
    - **Runtime:** `Node`
    - **Build Command:**
      ```bash
-     npm install && npx prisma generate && npm run build
+     npm install --include=dev && npx prisma generate && npm run build
      ```
    - **Start Command:**
      ```bash
-     npx prisma db push && npm run start:prod
+     npx prisma db push && npx prisma db seed && npm run start:prod
      ```
 6. Tại phần **Environment Variables**, bấm **Add Environment Variable**:
    - `DATABASE_URL`: *(Dán chuỗi kết nối Neon PostgreSQL vừa lấy ở Bước 4)*
@@ -108,7 +109,7 @@ Hệ thống cung cấp giải pháp điểm danh sinh viên/thành viên CLB kh
 
 ---
 
-## 6. Chạy Local Development
+## 6. Chạy Local Development & Seed Dữ liệu
 
 ```bash
 # 1. Cài đặt thư viện
@@ -121,7 +122,10 @@ cp .env.example .env
 # 3. Đồng bộ schema vào Neon DB
 npx prisma db push
 
-# 4. Chạy server ở chế độ dev
+# 4. Nạp dữ liệu mẫu (Seeding)
+npm run db:seed
+
+# 5. Chạy server ở chế độ dev
 npm run start:dev
 ```
 
@@ -134,9 +138,9 @@ Tài liệu Swagger: `http://localhost:3000/docs`
 
 Sau khi Render deploy thành công, URL Swagger nộp cho giáo viên sẽ có dạng:
 ```
-https://ble-check-in-api.onrender.com/docs
+https://<ten-app-cua-ban>.onrender.com/docs
 ```
-Giáo viên hoặc người chấm có thể bấm trực tiếp **Try it out** trên giao diện Swagger để:
-1. Tạo một phiên sinh hoạt CLB với Beacon UUID giả lập (`FDA50693-A4E2-4FB1-AFCF-C6EB07647825`, RSSI ngưỡng `-80`).
-2. Gửi request điểm danh mô phỏng điện thoại với RSSI `-65` (thành công) hoặc `-90` (bị từ chối do quá xa).
-3. Kiểm tra danh sách điểm danh và lịch sử sinh viên.
+Giáo viên hoặc người chấm có thể:
+1. Nhấn `POST /api/v1/sessions/seed-demo` $\rightarrow$ **Try it out** $\rightarrow$ **Execute** để nạp dữ liệu demo ngay tức thì nếu chưa có dữ liệu.
+2. Kiểm tra `GET /api/v1/sessions` để xem danh sách phiên điểm danh.
+3. Thử nghiệm `POST /api/v1/check-in` để giả lập điện thoại quét sóng BLE với RSSI `-65 dBm` (thành công) hoặc `-95 dBm` (bị từ chối do quá xa).
