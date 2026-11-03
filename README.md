@@ -140,7 +140,7 @@ Sau khi Render deploy thành công, URL Swagger nộp cho giáo viên sẽ có d
 ```
 https://<ten-app-cua-ban>.onrender.com/docs
 ```
-Giáo viên hoặc người chấm có thể:
-1. Nhấn `POST /api/v1/sessions/seed-demo` $\rightarrow$ **Try it out** $\rightarrow$ **Execute** để nạp dữ liệu demo ngay tức thì nếu chưa có dữ liệu.
-2. Kiểm tra `GET /api/v1/sessions` để xem danh sách phiên điểm danh.
+
+👉 **Xem kịch bản kiểm thử chi tiết từng bước tại:** [SWAGGER_TESTING_FLOW.md](./SWAGGER_TESTING_FLOW.md)  
+*(Kịch bản 1 luồng chuẩn 7 bước từ tạo phiên, điểm danh BLE gần, bắt gian lận ở xa, chống điểm danh trùng, xem danh sách và đóng phiên).*
 3. Thử nghiệm `POST /api/v1/check-in` để giả lập điện thoại quét sóng BLE với RSSI `-65 dBm` (thành công) hoặc `-95 dBm` (bị từ chối do quá xa).
