@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ClubSession {
+  id               String           @id @default(uuid())
+  title            String
+  clubCode         String
+  description      String?
+  startTime        DateTime
+  endTime          DateTime
+  status           String           @default("ACTIVE") // ACTIVE, CLOSED, CANCELLED
+  beaconUuid       String           // BLE iBeacon / Peripheral UUID
+  major            Int              @default(1)
+  minor            Int              @default(1)
+  minRssiThreshold Int              @default(-80) // dBm threshold (e.g. >= -80 dBm indicates ~3-5m proximity)
+  secretToken      String?          // Optional dynamic security token
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  checkIns         CheckInRecord[]
+
+  @@map("club_sessions")
+}
+
+model CheckInRecord {
+  id                String       @id @default(uuid())
+  sessionId         String
+  studentId         String
+  studentName       String
+  deviceId          String?
+  scannedRssi       Int          // Received Signal Strength Indicator (dBm)
+  distanceEstimated Float?       // Estimated distance in meters based on RSSI formula
+  status            String       @default("SUCCESS") // SUCCESS, REJECTED_TOO_FAR, LATE
+  checkInTime       DateTime     @default(now())
+  note              String?
+
+  session           ClubSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
+  @@map("check_in_records")
+}
+
