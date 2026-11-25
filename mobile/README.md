@@ -9,13 +9,11 @@ thời gian thực và xuất báo cáo CSV.
 
 | Liên kết | |
 |---|---|
-| Landing page | https://l02-produck.github.io/ble-check-in/ |
-| Mã nguồn chính thức | https://github.com/L02-ProDuck/ble-check-in |
-| GitHub Wiki | https://github.com/L02-ProDuck/ble-check-in/wiki |
-| Mã nguồn gốc phát triển (mobile) | https://github.com/SonTrinh235/BLE_Checkin |
-| Figma (thiết kế) | https://www.figma.com/design/fHnErTBBjMs503SmiZFgF9/MOBILE-APP-UI?node-id=1480-0 |
-| Figma prototype | https://www.figma.com/proto/fHnErTBBjMs503SmiZFgF9/MOBILE-APP-UI?node-id=9638-5690&p=f&scaling=min-zoom&content-scaling=fixed&page-id=1480%3A0&starting-point-node-id=9638%3A5690&show-proto-sidebar=1 |
-| Behance case study | https://www.behance.net/gallery/258911103/BLE-Check-in-Mobile-Attendance-App-UIUX-Case-Study |
+| Landing page | https://sontrinh235.github.io/BLE_Checkin/ |
+| Mã nguồn | https://github.com/SonTrinh235/BLE_Checkin |
+| Figma (thiết kế) | _cập nhật sau_ |
+| Figma prototype | _cập nhật sau_ |
+| Behance case study | _cập nhật sau_ |
 
 > Dự án môn học. Trạng thái: **prototype**. App đã chạy được trên máy ảo Android;
 > **phần Bluetooth thật chưa được kiểm thử trên 2 thiết bị thật** (xem mục
@@ -41,6 +39,8 @@ thời gian thực và xuất báo cáo CSV.
   CLB, tìm CLB, lịch sử nhóm theo ngày kèm thống kê, khung xương khi tải dữ liệu,
   thông báo khi offline, hộp thoại xác nhận và toast riêng của app (thay cho Alert hệ
   thống), chuyển trang/tab mượt, rung nhẹ khi chuyển tab và khi có người mới điểm danh.
+  Chi tiết chuyển động: số đếm chạy lên, chấm "đang mở" nhấp nháy, viền ô nhập đổi màu
+  khi focus, icon tab nảy nhẹ, pháo giấy khi điểm danh thành công, kéo để đồng bộ ở Lịch sử.
 
 ## Công nghệ
 
@@ -62,8 +62,8 @@ Không dùng được Expo Go vì có module native (Bluetooth, camera): phải 
 | `src/ble` | Hằng số và xin quyền Bluetooth |
 | `src/auth`, `src/firebase` | Đăng nhập, cấu hình Firebase |
 | `firestore.rules` | Quy tắc bảo mật Firestore |
-| `../landing/` | Landing page tĩnh (deploy bằng GitHub Pages) |
-| `../.github/workflows/pages.yml` | Tự động deploy landing page |
+| `landing/` | Landing page tĩnh (deploy bằng GitHub Pages) |
+| `.github/workflows/pages.yml` | Tự động deploy landing page |
 | `.github/workflows/ios-unsigned-ipa.yml` | Build IPA iOS chưa ký (chạy tay) |
 
 ## Chạy dự án
@@ -127,12 +127,6 @@ Hosting/Storage/Analytics. Sau khi sửa `firestore.rules` trong repo, phải
   thành viên (Android, iPhone) dùng chung một giao thức. Chưa kiểm thử trên máy thật.
 - BLE lab test: máy quét phải nhập mã phiên hiển thị trên máy chủ.
 
-## Nhóm thực hiện (`L02-ProDuck` — CO3043)
+## Nhóm thực hiện
 
-- **GVHD:** Hoàng Lê Hải Thanh
-- **Thành viên:**
-  - Trần Anh Hào (`2310856`)
-  - Tào Nguyễn Tâm Phúc (`2312716`)
-  - Nguyễn Miên Phú (`2312658`)
-  - Hà Trọng Sơn (`2312958`)
-  - Trịnh Đức Sơn (`2353056`)
+_Điền tên thành viên._
